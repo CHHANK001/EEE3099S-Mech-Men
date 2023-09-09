@@ -1,0 +1,6 @@
+﻿-I"C:\Users\Jack Youens\OneDrive\Documents\GitHub\EEE3099S-Mech-Men\Milestone 2\Simulation Resources"
+-I"C:\Users\Jack Youens\OneDrive\Documents\GitHub\EEE3099S-Mech-Men\Milestone 2\Simulation Resources\Drive_grt_rtw"
+-I"C:\Program Files\MATLAB\R2023a\extern\include"
+-I"C:\Program Files\MATLAB\R2023a\simulink\include"
+-I"C:\Program Files\MATLAB\R2023a\rtw\c\src"
+-I"C:\Program Files\MATLAB\R2023a\rtw\c\src\ext_mode\common"
