@@ -5,4 +5,4 @@ ticksPerRot = 20; % Ticks per rotation for encoders
 load wheelLUT %Look up table for platform motors
 Ts = 0.01; %Sample time
 load wheelMotorModel %Motor model for platform motorswheelMotorModel
-load Straight_line_with_objects.mat
+load Objects.mat
