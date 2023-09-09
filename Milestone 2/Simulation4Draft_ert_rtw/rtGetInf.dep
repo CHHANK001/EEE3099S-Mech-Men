@@ -1,0 +1,14 @@
+rtGetInf.o: \
+ C:/Users/JACKYO~1/OneDrive/DOCUME~1/GitHub/EEE309~1/MILEST~1/Simulation4Draft_ert_rtw/rtGetInf.c \
+ C:/Users/JACKYO~1/OneDrive/DOCUME~1/GitHub/EEE309~1/MILEST~1/Simulation4Draft_ert_rtw/rtwtypes.h \
+ C:/PROGRA~1/MATLAB/R2023a/extern/include/tmwtypes.h \
+ C:/Users/JACKYO~1/OneDrive/DOCUME~1/GitHub/EEE309~1/MILEST~1/Simulation4Draft_ert_rtw/rtGetInf.h \
+ C:/Users/JACKYO~1/OneDrive/DOCUME~1/GitHub/EEE309~1/MILEST~1/Simulation4Draft_ert_rtw/rt_nonfinite.h
+
+C:/Users/JACKYO~1/OneDrive/DOCUME~1/GitHub/EEE309~1/MILEST~1/Simulation4Draft_ert_rtw/rtwtypes.h:
+
+C:/PROGRA~1/MATLAB/R2023a/extern/include/tmwtypes.h:
+
+C:/Users/JACKYO~1/OneDrive/DOCUME~1/GitHub/EEE309~1/MILEST~1/Simulation4Draft_ert_rtw/rtGetInf.h:
+
+C:/Users/JACKYO~1/OneDrive/DOCUME~1/GitHub/EEE309~1/MILEST~1/Simulation4Draft_ert_rtw/rt_nonfinite.h:
