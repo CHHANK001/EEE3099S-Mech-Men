@@ -9,7 +9,7 @@
  *
  * Model version              : 5.21
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Thu Oct  5 15:36:20 2023
+ * C source code generated on : Fri Oct  6 14:11:18 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -27,17 +27,23 @@
 
 /* Named constants for Chart: '<Root>/Line Folwing' */
 #define Line_followi_IN_NO_ACTIVE_CHILD ((uint8_T)0U)
-#define Line_following2_CALL_EVENT     (-1)
-#define Line_following2_IN_CorrectLeft (1U)
-#define Line_following2_IN_CorrectRight (2U)
-#define Line_following2_IN_Drive       (3U)
-#define Line_following2_IN_End         (4U)
-#define Line_following2_IN_Random      (5U)
-#define Line_following2_IN_TurnAround  (6U)
-#define Line_following2_IN_TurnLeft    (7U)
-#define Line_following2_IN_TurnRight   (8U)
-#define Line_following2_IN_checkEnd    (9U)
-#define Line_following2_IN_notEnd      (10U)
+#define Line_followin_IN_ObjectDetected ((uint8_T)8U)
+#define Line_following2_IN_CorrectLeft ((uint8_T)1U)
+#define Line_following2_IN_CorrectLeft1 ((uint8_T)2U)
+#define Line_following2_IN_CorrectRight ((uint8_T)3U)
+#define Line_following2_IN_Drive       ((uint8_T)5U)
+#define Line_following2_IN_End         ((uint8_T)6U)
+#define Line_following2_IN_EndOfLine   ((uint8_T)7U)
+#define Line_following2_IN_Random      ((uint8_T)9U)
+#define Line_following2_IN_TurnAround  ((uint8_T)10U)
+#define Line_following2_IN_TurnAround1 ((uint8_T)11U)
+#define Line_following2_IN_TurnLeft    ((uint8_T)12U)
+#define Line_following2_IN_TurnRight   ((uint8_T)13U)
+#define Line_following2_IN_WeOUT       ((uint8_T)14U)
+#define Line_following2_IN_checkEnd    ((uint8_T)15U)
+#define Line_following2_IN_notEnd      ((uint8_T)16U)
+#define Line_following2_IN_update      ((uint8_T)17U)
+#define Line_following_IN_CorrectRight1 ((uint8_T)4U)
 
 /* Block signals (default storage) */
 B_Line_following2_T Line_following2_B;
@@ -50,6 +56,8 @@ static RT_MODEL_Line_following2_T Line_following2_M_;
 RT_MODEL_Line_following2_T *const Line_following2_M = &Line_following2_M_;
 
 /* Forward declaration for local functions */
+static void Line_following2_Drive(void);
+static void Line_following2_checkEnd(void);
 static real_T Line_following2_rand(void);
 static void rate_monotonic_scheduler(void);
 uint32_T plook_u32d_binckan(real_T u, const real_T bp[], uint32_T maxIndex)
@@ -150,6 +158,93 @@ static void rate_monotonic_scheduler(void)
   (Line_following2_M->Timing.TaskCounters.TID[2])++;
   if ((Line_following2_M->Timing.TaskCounters.TID[2]) > 299) {/* Sample time: [3.0s, 0.0s] */
     Line_following2_M->Timing.TaskCounters.TID[2] = 0;
+  }
+}
+
+/* Function for Chart: '<Root>/Line Folwing' */
+static void Line_following2_Drive(void)
+{
+  boolean_T tmp;
+  boolean_T tmp_0;
+  boolean_T tmp_1;
+  boolean_T tmp_2;
+  Line_following2_B.v = 0.12;
+  Line_following2_B.w = 0.0;
+  tmp = !Line_following2_B.TmpRTBAtLineFolwingInport1;
+  if (Line_following2_B.TmpRTBAtLineFolwingInport2 && tmp &&
+      Line_following2_B.TmpRTBAtLineFolwingInport4 &&
+      Line_following2_B.TmpRTBAtLineFolwingInport3) {
+    Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_CorrectRight;
+    Line_following2_B.w = -3.0;
+  } else {
+    tmp_0 = !Line_following2_B.TmpRTBAtLineFolwingInport2;
+    tmp_1 = !Line_following2_B.TmpRTBAtLineFolwingInport3;
+    tmp_2 = !Line_following2_B.TmpRTBAtLineFolwingInport4;
+    if (tmp_2 && tmp_0 && tmp && tmp_1) {
+      Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_checkEnd;
+      Line_following2_DW.temporalCounter_i1 = 0U;
+    } else {
+      tmp = ((Line_following2_DW.temporalCounter_i1 >= 50U) && tmp_0 && tmp);
+      if (tmp && tmp_1 && Line_following2_B.TmpRTBAtLineFolwingInport4) {
+        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_TurnRight;
+        Line_following2_DW.temporalCounter_i1 = 0U;
+        Line_following2_B.w = -3.0;
+      } else if (tmp_0 && Line_following2_B.TmpRTBAtLineFolwingInport1 &&
+                 Line_following2_B.TmpRTBAtLineFolwingInport4 &&
+                 Line_following2_B.TmpRTBAtLineFolwingInport3) {
+        Line_following2_DW.is_c1_Line_following2 =
+          Line_following2_IN_CorrectLeft;
+        Line_following2_B.w = 3.0;
+      } else if (Line_following2_B.UltrasonicSensor != 0.0) {
+        Line_following2_DW.is_c1_Line_following2 =
+          Line_followin_IN_ObjectDetected;
+      } else if (tmp && tmp_2) {
+        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_TurnLeft;
+        Line_following2_DW.temporalCounter_i1 = 0U;
+        Line_following2_B.w = 3.0;
+      } else if (Line_following2_B.TmpRTBAtLineFolwingInport4 &&
+                 Line_following2_B.TmpRTBAtLineFolwingInport2 &&
+                 Line_following2_B.TmpRTBAtLineFolwingInport1 &&
+                 Line_following2_B.TmpRTBAtLineFolwingInport3) {
+        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_EndOfLine;
+        Line_following2_DW.temporalCounter_i1 = 0U;
+        Line_following2_B.v = 0.0;
+      }
+    }
+  }
+}
+
+/* Function for Chart: '<Root>/Line Folwing' */
+static void Line_following2_checkEnd(void)
+{
+  boolean_T tmp;
+  Line_following2_B.v = 0.12;
+  if ((Line_following2_DW.temporalCounter_i1 >= 50U) &&
+      Line_following2_B.TmpRTBAtLineFolwingInport4 &&
+      Line_following2_B.TmpRTBAtLineFolwingInport2 &&
+      Line_following2_B.TmpRTBAtLineFolwingInport1 &&
+      Line_following2_B.TmpRTBAtLineFolwingInport3) {
+    Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_notEnd;
+    Line_following2_DW.temporalCounter_i1 = 0U;
+    Line_following2_B.v = -0.12;
+  } else {
+    tmp = ((Line_following2_DW.temporalCounter_i1 >= 50U) &&
+           (!Line_following2_B.TmpRTBAtLineFolwingInport4) &&
+           (!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
+           (!Line_following2_B.TmpRTBAtLineFolwingInport1) &&
+           (!Line_following2_B.TmpRTBAtLineFolwingInport3));
+    if (tmp && (Line_following2_DW.i == 0.0)) {
+      Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_End;
+      Line_following2_DW.temporalCounter_i1 = 0U;
+      Line_following2_B.v = 0.0;
+      Line_following2_B.w = 0.0;
+      Line_following2_DW.i = 1.0;
+    } else if (tmp && (Line_following2_DW.i == 1.0)) {
+      Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_TurnAround;
+      Line_following2_DW.temporalCounter_i1 = 0U;
+      Line_following2_B.v = 0.0;
+      Line_following2_B.w = 3.0;
+    }
   }
 }
 
@@ -340,12 +435,10 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
 {
   codertarget_arduinobase_inter_T *obj;
   real_T rtb_vtow_idx_0;
+  real_T rtb_vtow_idx_1;
   real_T u0;
-  real_T v;
   uint32_T duration;
   uint8_T tmp;
-  boolean_T tmp_0;
-  boolean_T tmp_1;
 
   {                                    /* Sample time: [0.01s, 0.0s] */
     rate_monotonic_scheduler();
@@ -396,17 +489,16 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
     Line_following2_DW.temporalCounter_i1++;
   }
 
-  Line_following2_DW.sfEvent = Line_following2_CALL_EVENT;
   if (Line_following2_DW.is_active_c1_Line_following2 == 0U) {
     Line_following2_DW.is_active_c1_Line_following2 = 1U;
     Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_Drive;
     Line_following2_DW.temporalCounter_i1 = 0U;
-    v = 0.12;
+    Line_following2_B.v = 0.12;
     Line_following2_B.w = 0.0;
   } else {
     switch (Line_following2_DW.is_c1_Line_following2) {
      case Line_following2_IN_CorrectLeft:
-      v = 0.12;
+      Line_following2_B.v = 0.12;
       Line_following2_B.w = 3.0;
       if ((!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
           (!Line_following2_B.TmpRTBAtLineFolwingInport1)) {
@@ -416,8 +508,18 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
       }
       break;
 
+     case Line_following2_IN_CorrectLeft1:
+      Line_following2_B.w = 3.0;
+      if ((!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
+          (!Line_following2_B.TmpRTBAtLineFolwingInport1)) {
+        Line_following2_DW.is_c1_Line_following2 =
+          Line_followin_IN_ObjectDetected;
+        Line_following2_B.v = 0.12;
+      }
+      break;
+
      case Line_following2_IN_CorrectRight:
-      v = 0.12;
+      Line_following2_B.v = 0.12;
       Line_following2_B.w = -3.0;
       if ((!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
           (!Line_following2_B.TmpRTBAtLineFolwingInport1)) {
@@ -427,42 +529,22 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
       }
       break;
 
-     case Line_following2_IN_Drive:
-      v = 0.12;
-      Line_following2_B.w = 0.0;
-      tmp_0 = !Line_following2_B.TmpRTBAtLineFolwingInport1;
-      if (Line_following2_B.TmpRTBAtLineFolwingInport2 && tmp_0 &&
-          Line_following2_B.TmpRTBAtLineFolwingInport4 &&
-          Line_following2_B.TmpRTBAtLineFolwingInport3) {
+     case Line_following_IN_CorrectRight1:
+      Line_following2_B.w = -3.0;
+      if ((!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
+          (!Line_following2_B.TmpRTBAtLineFolwingInport1)) {
         Line_following2_DW.is_c1_Line_following2 =
-          Line_following2_IN_CorrectRight;
-        Line_following2_B.w = -3.0;
-      } else {
-        tmp_1 = !Line_following2_B.TmpRTBAtLineFolwingInport2;
-        tmp_0 = ((Line_following2_DW.temporalCounter_i1 >= 50U) && tmp_1 &&
-                 tmp_0);
-        if (tmp_0 && (!Line_following2_B.TmpRTBAtLineFolwingInport3) &&
-            Line_following2_B.TmpRTBAtLineFolwingInport4) {
-          Line_following2_DW.is_c1_Line_following2 =
-            Line_following2_IN_TurnRight;
-          Line_following2_DW.temporalCounter_i1 = 0U;
-          Line_following2_B.w = -3.0;
-        } else if (tmp_1 && Line_following2_B.TmpRTBAtLineFolwingInport1 &&
-                   Line_following2_B.TmpRTBAtLineFolwingInport4 &&
-                   Line_following2_B.TmpRTBAtLineFolwingInport3) {
-          Line_following2_DW.is_c1_Line_following2 =
-            Line_following2_IN_CorrectLeft;
-          Line_following2_B.w = 3.0;
-        } else if (tmp_0 && (!Line_following2_B.TmpRTBAtLineFolwingInport4)) {
-          Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_TurnLeft;
-          Line_following2_DW.temporalCounter_i1 = 0U;
-          Line_following2_B.w = 3.0;
-        }
+          Line_followin_IN_ObjectDetected;
+        Line_following2_B.v = 0.12;
       }
       break;
 
+     case Line_following2_IN_Drive:
+      Line_following2_Drive();
+      break;
+
      case Line_following2_IN_End:
-      v = 0.0;
+      Line_following2_B.v = 0.0;
       Line_following2_B.w = 0.0;
       if (Line_following2_DW.temporalCounter_i1 >= 300U) {
         Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_TurnAround;
@@ -471,35 +553,87 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
       }
       break;
 
+     case Line_following2_IN_EndOfLine:
+      Line_following2_B.v = 0.0;
+      if ((Line_following2_B.UltrasonicSensor < Line_following2_DW.data1) &&
+          (Line_following2_B.UltrasonicSensor != 0.0) && (Line_following2_DW.i ==
+           0.0)) {
+        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_update;
+        Line_following2_DW.data1 = Line_following2_B.UltrasonicSensor;
+      } else if (Line_following2_DW.temporalCounter_i1 >= 100U) {
+        Line_following2_DW.is_c1_Line_following2 =
+          Line_following2_IN_TurnAround1;
+        Line_following2_DW.temporalCounter_i1 = 0U;
+        Line_following2_B.w = 3.0;
+      } else if ((Line_following2_DW.i == 1.0) &&
+                 (Line_following2_B.UltrasonicSensor == Line_following2_DW.data1))
+      {
+        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_WeOUT;
+        Line_following2_B.w = 0.0;
+      }
+      break;
+
+     case Line_followin_IN_ObjectDetected:
+      Line_following2_B.v = 0.12;
+      if ((!Line_following2_B.TmpRTBAtLineFolwingInport4) &&
+          (!Line_following2_B.TmpRTBAtLineFolwingInport3)) {
+        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_EndOfLine;
+        Line_following2_DW.temporalCounter_i1 = 0U;
+        Line_following2_B.v = 0.0;
+      } else if (Line_following2_B.TmpRTBAtLineFolwingInport2 &&
+                 (!Line_following2_B.TmpRTBAtLineFolwingInport1)) {
+        Line_following2_DW.is_c1_Line_following2 =
+          Line_following_IN_CorrectRight1;
+        Line_following2_B.w = -3.0;
+      } else if ((!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
+                 Line_following2_B.TmpRTBAtLineFolwingInport1) {
+        Line_following2_DW.is_c1_Line_following2 =
+          Line_following2_IN_CorrectLeft1;
+        Line_following2_B.w = 3.0;
+      }
+      break;
+
      case Line_following2_IN_Random:
       if (!Line_following2_B.TmpRTBAtLineFolwingInport6) {
         Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_TurnRight;
         Line_following2_DW.temporalCounter_i1 = 0U;
-        v = 0.12;
+        Line_following2_B.v = 0.12;
         Line_following2_B.w = -3.0;
       } else {
         Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_TurnLeft;
         Line_following2_DW.temporalCounter_i1 = 0U;
-        v = 0.12;
+        Line_following2_B.v = 0.12;
         Line_following2_B.w = 3.0;
       }
       break;
 
      case Line_following2_IN_TurnAround:
-      v = 0.0;
+      Line_following2_B.v = 0.0;
       Line_following2_B.w = 3.0;
       if ((Line_following2_DW.temporalCounter_i1 >= 200U) &&
           (!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
           (!Line_following2_B.TmpRTBAtLineFolwingInport1)) {
         Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_Drive;
         Line_following2_DW.temporalCounter_i1 = 0U;
-        v = 0.12;
+        Line_following2_B.v = 0.12;
+        Line_following2_B.w = 0.0;
+      }
+      break;
+
+     case Line_following2_IN_TurnAround1:
+      Line_following2_B.w = 3.0;
+      if ((Line_following2_DW.temporalCounter_i1 >= 100U) &&
+          (!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
+          (!Line_following2_B.TmpRTBAtLineFolwingInport1)) {
+        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_Drive;
+        Line_following2_DW.temporalCounter_i1 = 0U;
+        Line_following2_B.v = 0.12;
         Line_following2_B.w = 0.0;
       }
       break;
 
      case Line_following2_IN_TurnLeft:
-      v = 0.12;
+      Line_following2_B.v = 0.12;
       Line_following2_B.w = 3.0;
       if ((!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
           (!Line_following2_B.TmpRTBAtLineFolwingInport1) &&
@@ -511,7 +645,7 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
       break;
 
      case Line_following2_IN_TurnRight:
-      v = 0.12;
+      Line_following2_B.v = 0.12;
       Line_following2_B.w = -3.0;
       if ((Line_following2_DW.temporalCounter_i1 >= 50U) &&
           (!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
@@ -522,44 +656,27 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
       }
       break;
 
+     case Line_following2_IN_WeOUT:
+      Line_following2_B.v = 0.0;
+      Line_following2_B.w = 0.0;
+      break;
+
      case Line_following2_IN_checkEnd:
-      v = 0.12;
-      if ((Line_following2_DW.temporalCounter_i1 >= 50U) &&
-          Line_following2_B.TmpRTBAtLineFolwingInport4 &&
-          Line_following2_B.TmpRTBAtLineFolwingInport2 &&
-          Line_following2_B.TmpRTBAtLineFolwingInport1 &&
-          Line_following2_B.TmpRTBAtLineFolwingInport3) {
-        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_notEnd;
-        Line_following2_DW.temporalCounter_i1 = 0U;
-        v = -0.12;
-      } else {
-        tmp_0 = ((Line_following2_DW.temporalCounter_i1 >= 50U) &&
-                 (!Line_following2_B.TmpRTBAtLineFolwingInport4) &&
-                 (!Line_following2_B.TmpRTBAtLineFolwingInport2) &&
-                 (!Line_following2_B.TmpRTBAtLineFolwingInport1) &&
-                 (!Line_following2_B.TmpRTBAtLineFolwingInport3));
-        if (tmp_0) {
-          Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_End;
-          Line_following2_DW.temporalCounter_i1 = 0U;
-          v = 0.0;
-          Line_following2_B.w = 0.0;
-          Line_following2_DW.i = 1.0;
-        } else if (tmp_0) {
-          Line_following2_DW.is_c1_Line_following2 =
-            Line_following2_IN_TurnAround;
-          Line_following2_DW.temporalCounter_i1 = 0U;
-          v = 0.0;
-          Line_following2_B.w = 3.0;
-        }
+      Line_following2_checkEnd();
+      break;
+
+     case Line_following2_IN_notEnd:
+      Line_following2_B.v = -0.12;
+      if (Line_following2_DW.temporalCounter_i1 >= 50U) {
+        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_Random;
       }
       break;
 
      default:
-      /* case IN_notEnd: */
-      v = -0.12;
-      if (Line_following2_DW.temporalCounter_i1 >= 50U) {
-        Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_Random;
-      }
+      /* case IN_update: */
+      Line_following2_DW.is_c1_Line_following2 = Line_following2_IN_EndOfLine;
+      Line_following2_DW.temporalCounter_i1 = 0U;
+      Line_following2_B.v = 0.0;
       break;
     }
   }
@@ -571,11 +688,14 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
    *  SignalConversion generated from: '<S2>/change parameters'
    */
   u0 = 1.0 / Line_following2_P.Towlwr_wheelR;
-  rtb_vtow_idx_0 = (Line_following2_P.changeparameters_Gain[0] * v +
+  rtb_vtow_idx_0 = (Line_following2_P.changeparameters_Gain[0] *
+                    Line_following2_B.v +
                     Line_following2_P.changeparameters_Gain[2] *
                     Line_following2_B.w) * u0;
-  v = (Line_following2_P.changeparameters_Gain[1] * v +
-       Line_following2_P.changeparameters_Gain[3] * Line_following2_B.w) * u0;
+  rtb_vtow_idx_1 = (Line_following2_P.changeparameters_Gain[1] *
+                    Line_following2_B.v +
+                    Line_following2_P.changeparameters_Gain[3] *
+                    Line_following2_B.w) * u0;
 
   /* MATLABSystem: '<Root>/Left PWM' */
   obj = &Line_following2_DW.obj_f;
@@ -638,7 +758,7 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
   /* Lookup_n-D: '<Root>/Left Motor LUT1' incorporates:
    *  Abs: '<Root>/Abs'
    */
-  u0 = Line_following2_P.InputPWM[plook_u32d_binckan(fabs(v),
+  u0 = Line_following2_P.InputPWM[plook_u32d_binckan(fabs(rtb_vtow_idx_1),
     Line_following2_P.WheelSpeed, 172U)];
 
   /* MATLABSystem: '<Root>/Right PWM' */
@@ -656,16 +776,16 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
    *  Constant: '<Root>/Constant4'
    *  Constant: '<Root>/Constant5'
    */
-  if (v > Line_following2_P.Switch1_Threshold) {
-    rtb_vtow_idx_0 = Line_following2_P.Constant4_Value;
+  if (rtb_vtow_idx_1 > Line_following2_P.Switch1_Threshold) {
+    rtb_vtow_idx_1 = Line_following2_P.Constant4_Value;
   } else {
-    rtb_vtow_idx_0 = Line_following2_P.Constant5_Value;
+    rtb_vtow_idx_1 = Line_following2_P.Constant5_Value;
   }
 
   /* End of Switch: '<Root>/Switch1' */
 
   /* MATLABSystem: '<Root>/Right motor back' */
-  u0 = rt_roundd_snf(rtb_vtow_idx_0);
+  u0 = rt_roundd_snf(rtb_vtow_idx_1);
   if (u0 < 256.0) {
     if (u0 >= 0.0) {
       tmp = (uint8_T)u0;
@@ -683,46 +803,13 @@ void Line_following2_step0(void)       /* Sample time: [0.01s, 0.0s] */
   /* MATLABSystem: '<Root>/Right motor forward' incorporates:
    *  Logic: '<Root>/NOT1'
    */
-  writeDigitalPin(6, (uint8_T)!(rtb_vtow_idx_0 != 0.0));
-
-  /* Update absolute time */
-  /* The "clockTick0" counts the number of times the code of this task has
-   * been executed. The absolute time is the multiplication of "clockTick0"
-   * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not
-   * overflow during the application lifespan selected.
-   * Timer of this task consists of two 32 bit unsigned integers.
-   * The two integers represent the low bits Timing.clockTick0 and the high bits
-   * Timing.clockTickH0. When the low bit overflows to 0, the high bits increment.
-   */
-  if (!(++Line_following2_M->Timing.clockTick0)) {
-    ++Line_following2_M->Timing.clockTickH0;
-  }
-
-  Line_following2_M->Timing.taskTime0 = Line_following2_M->Timing.clockTick0 *
-    Line_following2_M->Timing.stepSize0 + Line_following2_M->Timing.clockTickH0 *
-    Line_following2_M->Timing.stepSize0 * 4294967296.0;
+  writeDigitalPin(6, (uint8_T)!(rtb_vtow_idx_1 != 0.0));
 }
 
 /* Model step function for TID1 */
 void Line_following2_step1(void)       /* Sample time: [0.1s, 0.0s] */
 {
-  /* MATLABSystem: '<Root>/sense1' */
-  if (Line_following2_DW.obj_m.SampleTime != Line_following2_P.sense1_SampleTime)
-  {
-    Line_following2_DW.obj_m.SampleTime = Line_following2_P.sense1_SampleTime;
-  }
-
-  /* MATLABSystem: '<Root>/sense1' */
-  Line_following2_B.sense1 = readDigitalPin(11);
-
-  /* MATLABSystem: '<Root>/sense2' */
-  if (Line_following2_DW.obj_b.SampleTime != Line_following2_P.sense2_SampleTime)
-  {
-    Line_following2_DW.obj_b.SampleTime = Line_following2_P.sense2_SampleTime;
-  }
-
-  /* MATLABSystem: '<Root>/sense2' */
-  Line_following2_B.sense2 = readDigitalPin(10);
+  boolean_T rtb_sense3;
 
   /* MATLABSystem: '<Root>/sense3' */
   if (Line_following2_DW.obj_h.SampleTime != Line_following2_P.sense3_SampleTime)
@@ -730,8 +817,25 @@ void Line_following2_step1(void)       /* Sample time: [0.1s, 0.0s] */
     Line_following2_DW.obj_h.SampleTime = Line_following2_P.sense3_SampleTime;
   }
 
-  /* MATLABSystem: '<Root>/sense3' */
-  Line_following2_B.sense3 = readDigitalPin(9);
+  rtb_sense3 = readDigitalPin(9);
+
+  /* End of MATLABSystem: '<Root>/sense3' */
+
+  /* RateTransition generated from: '<Root>/Line Folwing' */
+  Line_following2_DW.TmpRTBAtLineFolwingInport1_Buff = rtb_sense3;
+
+  /* MATLABSystem: '<Root>/sense2' */
+  if (Line_following2_DW.obj_b.SampleTime != Line_following2_P.sense2_SampleTime)
+  {
+    Line_following2_DW.obj_b.SampleTime = Line_following2_P.sense2_SampleTime;
+  }
+
+  rtb_sense3 = readDigitalPin(10);
+
+  /* End of MATLABSystem: '<Root>/sense2' */
+
+  /* RateTransition generated from: '<Root>/Line Folwing' */
+  Line_following2_DW.TmpRTBAtLineFolwingInport2_Buff = rtb_sense3;
 
   /* MATLABSystem: '<Root>/sense4' */
   if (Line_following2_DW.obj.SampleTime != Line_following2_P.sense4_SampleTime)
@@ -739,64 +843,40 @@ void Line_following2_step1(void)       /* Sample time: [0.1s, 0.0s] */
     Line_following2_DW.obj.SampleTime = Line_following2_P.sense4_SampleTime;
   }
 
-  /* MATLABSystem: '<Root>/sense4' */
-  Line_following2_B.sense4 = readDigitalPin(8);
+  rtb_sense3 = readDigitalPin(8);
+
+  /* End of MATLABSystem: '<Root>/sense4' */
 
   /* RateTransition generated from: '<Root>/Line Folwing' */
-  Line_following2_DW.TmpRTBAtLineFolwingInport3_Buff = Line_following2_B.sense4;
+  Line_following2_DW.TmpRTBAtLineFolwingInport3_Buff = rtb_sense3;
 
-  /* RateTransition generated from: '<Root>/Line Folwing' */
-  Line_following2_DW.TmpRTBAtLineFolwingInport1_Buff = Line_following2_B.sense3;
-
-  /* RateTransition generated from: '<Root>/Line Folwing' */
-  Line_following2_DW.TmpRTBAtLineFolwingInport2_Buff = Line_following2_B.sense2;
-
-  /* RateTransition generated from: '<Root>/Line Folwing' */
-  Line_following2_DW.TmpRTBAtLineFolwingInport4_Buff = Line_following2_B.sense1;
-
-  /* Update absolute time */
-  /* The "clockTick1" counts the number of times the code of this task has
-   * been executed. The resolution of this integer timer is 0.1, which is the step size
-   * of the task. Size of "clockTick1" ensures timer will not overflow during the
-   * application lifespan selected.
-   * Timer of this task consists of two 32 bit unsigned integers.
-   * The two integers represent the low bits Timing.clockTick1 and the high bits
-   * Timing.clockTickH1. When the low bit overflows to 0, the high bits increment.
-   */
-  Line_following2_M->Timing.clockTick1++;
-  if (!Line_following2_M->Timing.clockTick1) {
-    Line_following2_M->Timing.clockTickH1++;
+  /* MATLABSystem: '<Root>/sense1' */
+  if (Line_following2_DW.obj_m.SampleTime != Line_following2_P.sense1_SampleTime)
+  {
+    Line_following2_DW.obj_m.SampleTime = Line_following2_P.sense1_SampleTime;
   }
+
+  rtb_sense3 = readDigitalPin(11);
+
+  /* End of MATLABSystem: '<Root>/sense1' */
+
+  /* RateTransition generated from: '<Root>/Line Folwing' */
+  Line_following2_DW.TmpRTBAtLineFolwingInport4_Buff = rtb_sense3;
 }
 
 /* Model step function for TID2 */
 void Line_following2_step2(void)       /* Sample time: [3.0s, 0.0s] */
 {
   real_T b;
+  boolean_T rtb_RandomIntegerGenerator;
 
   /* MATLABSystem: '<Root>/Random Integer Generator' */
   b = Line_following2_rand();
-
-  /* MATLABSystem: '<Root>/Random Integer Generator' */
-  Line_following2_B.RandomIntegerGenerator = (floor(b * 2.0) != 0.0);
+  rtb_RandomIntegerGenerator = (floor(b * 2.0) != 0.0);
 
   /* RateTransition generated from: '<Root>/Line Folwing' */
   Line_following2_DW.TmpRTBAtLineFolwingInport6_Buff =
-    Line_following2_B.RandomIntegerGenerator;
-
-  /* Update absolute time */
-  /* The "clockTick2" counts the number of times the code of this task has
-   * been executed. The resolution of this integer timer is 3.0, which is the step size
-   * of the task. Size of "clockTick2" ensures timer will not overflow during the
-   * application lifespan selected.
-   * Timer of this task consists of two 32 bit unsigned integers.
-   * The two integers represent the low bits Timing.clockTick2 and the high bits
-   * Timing.clockTickH2. When the low bit overflows to 0, the high bits increment.
-   */
-  Line_following2_M->Timing.clockTick2++;
-  if (!Line_following2_M->Timing.clockTick2) {
-    Line_following2_M->Timing.clockTickH2++;
-  }
+    rtb_RandomIntegerGenerator;
 }
 
 /* Model initialize function */
@@ -807,45 +887,6 @@ void Line_following2_initialize(void)
   /* initialize real-time model */
   (void) memset((void *)Line_following2_M, 0,
                 sizeof(RT_MODEL_Line_following2_T));
-  rtmSetTFinal(Line_following2_M, 100.0);
-  Line_following2_M->Timing.stepSize0 = 0.01;
-
-  /* External mode info */
-  Line_following2_M->Sizes.checksums[0] = (3281581251U);
-  Line_following2_M->Sizes.checksums[1] = (3708506845U);
-  Line_following2_M->Sizes.checksums[2] = (824156838U);
-  Line_following2_M->Sizes.checksums[3] = (4279095746U);
-
-  {
-    static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
-    static RTWExtModeInfo rt_ExtModeInfo;
-    static const sysRanDType *systemRan[18];
-    Line_following2_M->extModeInfo = (&rt_ExtModeInfo);
-    rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
-    systemRan[0] = &rtAlwaysEnabled;
-    systemRan[1] = &rtAlwaysEnabled;
-    systemRan[2] = &rtAlwaysEnabled;
-    systemRan[3] = &rtAlwaysEnabled;
-    systemRan[4] = &rtAlwaysEnabled;
-    systemRan[5] = &rtAlwaysEnabled;
-    systemRan[6] = &rtAlwaysEnabled;
-    systemRan[7] = &rtAlwaysEnabled;
-    systemRan[8] = &rtAlwaysEnabled;
-    systemRan[9] = &rtAlwaysEnabled;
-    systemRan[10] = &rtAlwaysEnabled;
-    systemRan[11] = &rtAlwaysEnabled;
-    systemRan[12] = &rtAlwaysEnabled;
-    systemRan[13] = &rtAlwaysEnabled;
-    systemRan[14] = &rtAlwaysEnabled;
-    systemRan[15] = &rtAlwaysEnabled;
-    systemRan[16] = &rtAlwaysEnabled;
-    systemRan[17] = &rtAlwaysEnabled;
-    rteiSetModelMappingInfoPtr(Line_following2_M->extModeInfo,
-      &Line_following2_M->SpecialInfo.mappingInfo);
-    rteiSetChecksumsPtr(Line_following2_M->extModeInfo,
-                        Line_following2_M->Sizes.checksums);
-    rteiSetTPtr(Line_following2_M->extModeInfo, rtmGetTPtr(Line_following2_M));
-  }
 
   /* block I/O */
   (void) memset(((void *) &Line_following2_B), 0,
@@ -1042,13 +1083,13 @@ void Line_following2_initialize(void)
     digitalIOSetup(6, 1);
     Line_following2_DW.obj_hn.isSetupComplete = true;
 
-    /* Start for MATLABSystem: '<Root>/sense1' */
-    Line_following2_DW.obj_m.matlabCodegenIsDeleted = false;
-    Line_following2_DW.objisempty_h = true;
-    Line_following2_DW.obj_m.SampleTime = Line_following2_P.sense1_SampleTime;
-    Line_following2_DW.obj_m.isInitialized = 1;
-    digitalIOSetup(11, 0);
-    Line_following2_DW.obj_m.isSetupComplete = true;
+    /* Start for MATLABSystem: '<Root>/sense3' */
+    Line_following2_DW.obj_h.matlabCodegenIsDeleted = false;
+    Line_following2_DW.objisempty_f = true;
+    Line_following2_DW.obj_h.SampleTime = Line_following2_P.sense3_SampleTime;
+    Line_following2_DW.obj_h.isInitialized = 1;
+    digitalIOSetup(9, 0);
+    Line_following2_DW.obj_h.isSetupComplete = true;
 
     /* Start for MATLABSystem: '<Root>/sense2' */
     Line_following2_DW.obj_b.matlabCodegenIsDeleted = false;
@@ -1058,14 +1099,6 @@ void Line_following2_initialize(void)
     digitalIOSetup(10, 0);
     Line_following2_DW.obj_b.isSetupComplete = true;
 
-    /* Start for MATLABSystem: '<Root>/sense3' */
-    Line_following2_DW.obj_h.matlabCodegenIsDeleted = false;
-    Line_following2_DW.objisempty_f = true;
-    Line_following2_DW.obj_h.SampleTime = Line_following2_P.sense3_SampleTime;
-    Line_following2_DW.obj_h.isInitialized = 1;
-    digitalIOSetup(9, 0);
-    Line_following2_DW.obj_h.isSetupComplete = true;
-
     /* Start for MATLABSystem: '<Root>/sense4' */
     Line_following2_DW.obj.matlabCodegenIsDeleted = false;
     Line_following2_DW.objisempty = true;
@@ -1073,6 +1106,14 @@ void Line_following2_initialize(void)
     Line_following2_DW.obj.isInitialized = 1;
     digitalIOSetup(8, 0);
     Line_following2_DW.obj.isSetupComplete = true;
+
+    /* Start for MATLABSystem: '<Root>/sense1' */
+    Line_following2_DW.obj_m.matlabCodegenIsDeleted = false;
+    Line_following2_DW.objisempty_h = true;
+    Line_following2_DW.obj_m.SampleTime = Line_following2_P.sense1_SampleTime;
+    Line_following2_DW.obj_m.isInitialized = 1;
+    digitalIOSetup(11, 0);
+    Line_following2_DW.obj_m.isSetupComplete = true;
 
     /* Start for MATLABSystem: '<Root>/Random Integer Generator' */
     Line_following2_DW.method = 7U;
@@ -1109,13 +1150,12 @@ void Line_following2_initialize(void)
     Line_following2_P.TmpRTBAtLineFolwingInport6_Init;
 
   /* SystemInitialize for Chart: '<Root>/Line Folwing' */
-  Line_following2_DW.sfEvent = Line_following2_CALL_EVENT;
   Line_following2_DW.temporalCounter_i1 = 0U;
   Line_following2_DW.is_active_c1_Line_following2 = 0U;
   Line_following2_DW.is_c1_Line_following2 = Line_followi_IN_NO_ACTIVE_CHILD;
   Line_following2_DW.i = 0.0;
-  Line_following2_DW.n = 1.0;
   Line_following2_DW.data1 = 100.0;
+  Line_following2_B.v = 0.0;
   Line_following2_B.w = 0.0;
 }
 
@@ -1184,12 +1224,12 @@ void Line_following2_terminate(void)
 
   /* End of Terminate for MATLABSystem: '<Root>/Right motor forward' */
 
-  /* Terminate for MATLABSystem: '<Root>/sense1' */
-  if (!Line_following2_DW.obj_m.matlabCodegenIsDeleted) {
-    Line_following2_DW.obj_m.matlabCodegenIsDeleted = true;
+  /* Terminate for MATLABSystem: '<Root>/sense3' */
+  if (!Line_following2_DW.obj_h.matlabCodegenIsDeleted) {
+    Line_following2_DW.obj_h.matlabCodegenIsDeleted = true;
   }
 
-  /* End of Terminate for MATLABSystem: '<Root>/sense1' */
+  /* End of Terminate for MATLABSystem: '<Root>/sense3' */
 
   /* Terminate for MATLABSystem: '<Root>/sense2' */
   if (!Line_following2_DW.obj_b.matlabCodegenIsDeleted) {
@@ -1198,17 +1238,17 @@ void Line_following2_terminate(void)
 
   /* End of Terminate for MATLABSystem: '<Root>/sense2' */
 
-  /* Terminate for MATLABSystem: '<Root>/sense3' */
-  if (!Line_following2_DW.obj_h.matlabCodegenIsDeleted) {
-    Line_following2_DW.obj_h.matlabCodegenIsDeleted = true;
-  }
-
-  /* End of Terminate for MATLABSystem: '<Root>/sense3' */
-
   /* Terminate for MATLABSystem: '<Root>/sense4' */
   if (!Line_following2_DW.obj.matlabCodegenIsDeleted) {
     Line_following2_DW.obj.matlabCodegenIsDeleted = true;
   }
 
   /* End of Terminate for MATLABSystem: '<Root>/sense4' */
+
+  /* Terminate for MATLABSystem: '<Root>/sense1' */
+  if (!Line_following2_DW.obj_m.matlabCodegenIsDeleted) {
+    Line_following2_DW.obj_m.matlabCodegenIsDeleted = true;
+  }
+
+  /* End of Terminate for MATLABSystem: '<Root>/sense1' */
 }

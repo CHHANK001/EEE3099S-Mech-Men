@@ -9,7 +9,7 @@
  *
  * Model version              : 5.21
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Thu Oct  5 15:36:20 2023
+ * C source code generated on : Fri Oct  6 14:11:18 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,8 +23,6 @@
 #ifndef Line_following2_COMMON_INCLUDES_
 #define Line_following2_COMMON_INCLUDES_
 #include "rtwtypes.h"
-#include "rtw_extmode.h"
-#include "sysran_types.h"
 #include "rtw_continuous.h"
 #include "rtw_solver.h"
 #include "MW_PWM.h"
@@ -34,17 +32,10 @@
 
 #include "Line_following2_types.h"
 #include <string.h>
+#include <stddef.h>
 #include "MW_target_hardware_resources.h"
 
 /* Macros for accessing real-time model data structure */
-#ifndef rtmGetFinalTime
-#define rtmGetFinalTime(rtm)           ((rtm)->Timing.tFinal)
-#endif
-
-#ifndef rtmGetRTWExtModeInfo
-#define rtmGetRTWExtModeInfo(rtm)      ((rtm)->extModeInfo)
-#endif
-
 #ifndef rtmGetErrorStatus
 #define rtmGetErrorStatus(rtm)         ((rtm)->errorStatus)
 #endif
@@ -57,30 +48,6 @@
 #define rtmStepTask(rtm, idx)          ((rtm)->Timing.TaskCounters.TID[(idx)] == 0)
 #endif
 
-#ifndef rtmGetStopRequested
-#define rtmGetStopRequested(rtm)       ((rtm)->Timing.stopRequestedFlag)
-#endif
-
-#ifndef rtmSetStopRequested
-#define rtmSetStopRequested(rtm, val)  ((rtm)->Timing.stopRequestedFlag = (val))
-#endif
-
-#ifndef rtmGetStopRequestedPtr
-#define rtmGetStopRequestedPtr(rtm)    (&((rtm)->Timing.stopRequestedFlag))
-#endif
-
-#ifndef rtmGetT
-#define rtmGetT(rtm)                   ((rtm)->Timing.taskTime0)
-#endif
-
-#ifndef rtmGetTFinal
-#define rtmGetTFinal(rtm)              ((rtm)->Timing.tFinal)
-#endif
-
-#ifndef rtmGetTPtr
-#define rtmGetTPtr(rtm)                (&(rtm)->Timing.taskTime0)
-#endif
-
 #ifndef rtmTaskCounter
 #define rtmTaskCounter(rtm, idx)       ((rtm)->Timing.TaskCounters.TID[(idx)])
 #endif
@@ -88,17 +55,13 @@
 /* Block signals (default storage) */
 typedef struct {
   real_T UltrasonicSensor;             /* '<Root>/Ultrasonic Sensor' */
+  real_T v;                            /* '<Root>/Line Folwing' */
   real_T w;                            /* '<Root>/Line Folwing' */
   boolean_T TmpRTBAtLineFolwingInport1;/* '<Root>/sense3' */
   boolean_T TmpRTBAtLineFolwingInport2;/* '<Root>/sense2' */
   boolean_T TmpRTBAtLineFolwingInport3;/* '<Root>/sense4' */
   boolean_T TmpRTBAtLineFolwingInport4;/* '<Root>/sense1' */
   boolean_T TmpRTBAtLineFolwingInport6;/* '<Root>/Random Integer Generator' */
-  boolean_T sense4;                    /* '<Root>/sense4' */
-  boolean_T sense3;                    /* '<Root>/sense3' */
-  boolean_T sense2;                    /* '<Root>/sense2' */
-  boolean_T sense1;                    /* '<Root>/sense1' */
-  boolean_T RandomIntegerGenerator;    /* '<Root>/Random Integer Generator' */
 } B_Line_following2_T;
 
 /* Block states (default storage) for system '<Root>' */
@@ -114,22 +77,16 @@ typedef struct {
   codertarget_arduinobase_inter_T obj_p;/* '<Root>/Right PWM' */
   codertarget_arduinobase_inter_T obj_f;/* '<Root>/Left PWM' */
   real_T i;                            /* '<Root>/Line Folwing' */
-  real_T n;                            /* '<Root>/Line Folwing' */
   real_T data1;                        /* '<Root>/Line Folwing' */
   codertarget_arduinobase_int_b_T obj_bs;/* '<Root>/Ultrasonic Sensor' */
-  struct {
-    void *LoggedData[4];
-  } Scope_PWORK;                       /* '<Root>/Scope' */
-
-  int32_T sfEvent;                     /* '<Root>/Line Folwing' */
   uint32_T state;                      /* '<Root>/Random Integer Generator' */
   uint32_T state_f[2];                 /* '<Root>/Random Integer Generator' */
   uint32_T state_p[625];               /* '<Root>/Random Integer Generator' */
   uint32_T method;                     /* '<Root>/Random Integer Generator' */
-  uint32_T is_c1_Line_following2;      /* '<Root>/Line Folwing' */
   comm_internal_RandomIntegerGe_T obj_ba;/* '<Root>/Random Integer Generator' */
   uint16_T temporalCounter_i1;         /* '<Root>/Line Folwing' */
   uint8_T is_active_c1_Line_following2;/* '<Root>/Line Folwing' */
+  uint8_T is_c1_Line_following2;       /* '<Root>/Line Folwing' */
   boolean_T TmpRTBAtLineFolwingInport1_Buff;/* synthesized block */
   boolean_T TmpRTBAtLineFolwingInport2_Buff;/* synthesized block */
   boolean_T TmpRTBAtLineFolwingInport3_Buff;/* synthesized block */
@@ -227,26 +184,6 @@ struct P_Line_following2_T_ {
 /* Real-time Model Data Structure */
 struct tag_RTM_Line_following2_T {
   const char_T *errorStatus;
-  RTWExtModeInfo *extModeInfo;
-
-  /*
-   * Sizes:
-   * The following substructure contains sizes information
-   * for many of the model attributes such as inputs, outputs,
-   * dwork, sample times, etc.
-   */
-  struct {
-    uint32_T checksums[4];
-  } Sizes;
-
-  /*
-   * SpecialInfo:
-   * The following substructure contains special information
-   * related to other components that are dependent on RTW.
-   */
-  struct {
-    const void *mappingInfo;
-  } SpecialInfo;
 
   /*
    * Timing:
@@ -254,14 +191,6 @@ struct tag_RTM_Line_following2_T {
    * the timing information for the model.
    */
   struct {
-    time_T taskTime0;
-    uint32_T clockTick0;
-    uint32_T clockTickH0;
-    time_T stepSize0;
-    uint32_T clockTick1;
-    uint32_T clockTickH1;
-    uint32_T clockTick2;
-    uint32_T clockTickH2;
     struct {
       uint16_T TID[3];
     } TaskCounters;
@@ -270,9 +199,6 @@ struct tag_RTM_Line_following2_T {
       boolean_T TID0_1;
       boolean_T TID0_2;
     } RateInteraction;
-
-    time_T tFinal;
-    boolean_T stopRequestedFlag;
   } Timing;
 };
 
@@ -299,6 +225,15 @@ extern void Line_following2_terminate(void);
 extern RT_MODEL_Line_following2_T *const Line_following2_M;
 extern volatile boolean_T stopRequested;
 extern volatile boolean_T runModel;
+
+/*-
+ * These blocks were eliminated from the model due to optimizations:
+ *
+ * Block '<Root>/Display' : Unused code path elimination
+ * Block '<Root>/Display1' : Unused code path elimination
+ * Block '<Root>/Display2' : Unused code path elimination
+ * Block '<Root>/Display3' : Unused code path elimination
+ */
 
 /*-
  * The generated code includes comments that allow you to trace directly

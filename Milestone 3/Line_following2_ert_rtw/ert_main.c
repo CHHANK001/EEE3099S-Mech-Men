@@ -1,7 +1,5 @@
 #include "Line_following2.h"
 #include "rtwtypes.h"
-#include "xcp.h"
-#include "ext_mode.h"
 #include "MW_target_hardware_resources.h"
 
 volatile int IsrOverrun = 0;
@@ -11,7 +9,6 @@ boolean_T need2runFlags[3] = { 0, 0, 0 };
 
 void rt_OneStep(void)
 {
-  extmodeSimulationTime_T currentTime = (extmodeSimulationTime_T) 0;
   boolean_T eventFlags[3];
   int_T i;
 
@@ -35,14 +32,9 @@ void rt_OneStep(void)
 
 #endif;
 
-  currentTime = (extmodeSimulationTime_T) Line_following2_M->Timing.taskTime0;
   Line_following2_step0();
 
   /* Get model outputs here */
-
-  /* Trigger External Mode event */
-  extmodeEvent(0, currentTime);
-
 #ifndef _MW_ARDUINO_LOOP_
 
   noInterrupts();
@@ -79,27 +71,15 @@ void rt_OneStep(void)
       switch (i)
       {
        case 1 :
-        currentTime = (extmodeSimulationTime_T)
-          (((Line_following2_M->Timing.clockTick1+
-             Line_following2_M->Timing.clockTickH1* 4294967296.0)) * 0.1);
         Line_following2_step1();
 
         /* Get model outputs here */
-
-        /* Trigger External Mode event */
-        extmodeEvent(1, currentTime);
         break;
 
        case 2 :
-        currentTime = (extmodeSimulationTime_T)
-          (((Line_following2_M->Timing.clockTick2+
-             Line_following2_M->Timing.clockTickH2* 4294967296.0)) * 3.0);
         Line_following2_step2();
 
         /* Get model outputs here */
-
-        /* Trigger External Mode event */
-        extmodeEvent(2, currentTime);
         break;
 
        default :
@@ -124,7 +104,6 @@ int main(void)
 {
   float modelBaseRate = 0.01;
   float systemClock = 0;
-  extmodeErrorCode_T errorCode = EXTMODE_SUCCESS;
 
   /* Initialize variables */
   stopRequested = false;
@@ -133,37 +112,10 @@ int main(void)
   MW_usbattach();
   MW_Arduino_Init();
   rtmSetErrorStatus(Line_following2_M, 0);
-
-  /* Parse External Mode command line arguments */
-  errorCode = extmodeParseArgs(0, NULL);
-  if (errorCode != EXTMODE_SUCCESS) {
-    return (errorCode);
-  }
-
   Line_following2_initialize();
   noInterrupts();
-  interrupts();
-
-  /* External Mode initialization */
-  errorCode = extmodeInit(Line_following2_M->extModeInfo, &rtmGetTFinal
-    (Line_following2_M));
-  if (errorCode != EXTMODE_SUCCESS) {
-    /* Code to handle External Mode initialization errors
-       may be added here */
-  }
-
-  if (errorCode == EXTMODE_SUCCESS) {
-    /* Wait until a Start or Stop Request has been received from the Host */
-    extmodeWaitForHostRequest(EXTMODE_WAIT_FOREVER);
-    if (extmodeStopRequested()) {
-      rtmSetStopRequested(Line_following2_M, true);
-    }
-  }
-
-  noInterrupts();
   configureArduinoARM_M0plusTimer();
-  runModel = !extmodeSimulationComplete() && !extmodeStopRequested() &&
-    !rtmGetStopRequested(Line_following2_M);
+  runModel = rtmGetErrorStatus(Line_following2_M) == (NULL);
 
 #ifndef _MW_ARDUINO_LOOP_
 
@@ -173,26 +125,12 @@ int main(void)
 
   interrupts();
   while (runModel) {
-    /* Run External Mode background activities */
-    errorCode = extmodeBackgroundRun();
-    if (errorCode != EXTMODE_SUCCESS) {
-      /* Code to handle External Mode background task errors
-         may be added here */
-    }
-
-    stopRequested = !(!extmodeSimulationComplete() && !extmodeStopRequested() &&
-                      !rtmGetStopRequested(Line_following2_M));
-    runModel = !(stopRequested);
-    if (stopRequested)
-      disable_rt_OneStep();
+    stopRequested = !(rtmGetErrorStatus(Line_following2_M) == (NULL));
     MW_Arduino_Loop();
   }
 
   /* Terminate model */
   Line_following2_terminate();
-
-  /* External Mode reset */
-  extmodeReset();
   MW_Arduino_Terminate();
   noInterrupts();
   return 0;
