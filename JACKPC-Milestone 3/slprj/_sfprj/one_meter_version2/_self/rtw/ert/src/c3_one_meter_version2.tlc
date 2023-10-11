@@ -1,0 +1,62 @@
+%implements "chartSource" "C"
+%function ChartConfig(block, system) void
+  %createrecord chartConfiguration { ...
+          executeAtInitialization  0 ...
+  }
+  %return chartConfiguration
+%endfunction
+%function ChartDataMap(block, system) void
+  %createrecord ChartDataElements {\
+    NumChartData   6 \
+    ChartDataDefaults {\
+      RecordType   "ChartData"\
+      Dimensions   []\
+      IsTestPoint  0\
+    }\
+    ChartData {\
+      Name         "dist1Tick"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "dist1Tick"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "reqTicks"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "reqTicks"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "i"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "i"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "sfEvent"\
+      Description  "ActiveChartEvent"\
+      SFName       ""\
+      Path         ""\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "is_active_c3_one_meter_version2"\
+      Description  "StateIsActive"\
+      SFName       "is_active_c3_one_meter_version2"\
+      Path         "is_active_c3_one_meter_version2"\
+      SrcLocation  ""\
+      IsTestPoint  1\
+    }\
+    ChartData {\
+      Name         "is_c3_one_meter_version2"\
+      Description  "StateActiveChild"\
+      SFName       "is_c3_one_meter_version2"\
+      Path         "is_c3_one_meter_version2"\
+      SrcLocation  ""\
+      IsTestPoint  1\
+    }\
+  }
+  %return ChartDataElements
+%endfunction

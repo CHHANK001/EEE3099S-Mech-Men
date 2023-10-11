@@ -1,0 +1,100 @@
+Set binary mode
+readWord(addr=0)=0x20007ffc
+readWord(addr=0xe000ed00)=0x410cc601
+readWord(addr=0x41002018)=0x10010305
+version()=v2.0 [Arduino:XYZ] Apr 19 2019 14:38:48
+chipId=0x10010005
+Connected at 921600 baud
+readWord(addr=0)=0x20007ffc
+readWord(addr=0xe000ed00)=0x410cc601
+readWord(addr=0x41002018)=0x10010305
+Atmel SMART device 0x10010005 found
+write(addr=0x20004000,size=0x34)
+writeWord(addr=0x20004030,value=0x10)
+writeWord(addr=0x20004020,value=0x20008000)
+Device       : ATSAMD21G18A
+readWord(addr=0)=0x20007ffc
+readWord(addr=0xe000ed00)=0x410cc601
+readWord(addr=0x41002018)=0x10010305
+Chip ID      : 10010005
+version()=v2.0 [Arduino:XYZ] Apr 19 2019 14:38:48
+Version      : v2.0 [Arduino:XYZ] Apr 19 2019 14:38:48
+Address      : 8192
+Pages        : 3968
+Page Size    : 64 bytes
+Total Size   : 248KB
+Planes       : 1
+Lock Regions : 16
+Locked       : readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+readWord(addr=0x41004020)=0xffff
+none
+readWord(addr=0x41004018)=0
+Security     : false
+Boot Flash   : true
+readWord(addr=0x40000834)=0x7000a
+BOD          : true
+readWord(addr=0x40000834)=0x7000a
+BOR          : true
+Arduino      : FAST_CHIP_ERASE
+Arduino      : FAST_MULTI_PAGE_WRITE
+Arduino      : CAN_CHECKSUM_MEMORY_BUFFER
+Erase flash
+chipErase(addr=0x2000)
+done in 0.804 seconds
+
+Write 38980 bytes to flash (610 pages)
+write(addr=0x20005000,size=0x1000)
+writeBuffer(scr_addr=0x20005000, dst_addr=0x2000, size=0x1000)
+[===                           ] 10% (64/610 pages)write(addr=0x20005000,size=0x1000)
+writeBuffer(scr_addr=0x20005000, dst_addr=0x3000, size=0x1000)
+[======                        ] 20% (128/610 pages)write(addr=0x20005000,size=0x1000)
+writeBuffer(scr_addr=0x20005000, dst_addr=0x4000, size=0x1000)
+[=========                     ] 31% (192/610 pages)write(addr=0x20005000,size=0x1000)
+writeBuffer(scr_addr=0x20005000, dst_addr=0x5000, size=0x1000)
+[============                  ] 41% (256/610 pages)write(addr=0x20005000,size=0x1000)
+writeBuffer(scr_addr=0x20005000, dst_addr=0x6000, size=0x1000)
+[===============               ] 52% (320/610 pages)write(addr=0x20005000,size=0x1000)
+writeBuffer(scr_addr=0x20005000, dst_addr=0x7000, size=0x1000)
+[==================            ] 62% (384/610 pages)write(addr=0x20005000,size=0x1000)
+writeBuffer(scr_addr=0x20005000, dst_addr=0x8000, size=0x1000)
+[======================        ] 73% (448/610 pages)write(addr=0x20005000,size=0x1000)
+writeBuffer(scr_addr=0x20005000, dst_addr=0x9000, size=0x1000)
+[=========================     ] 83% (512/610 pages)write(addr=0x20005000,size=0x1000)
+writeBuffer(scr_addr=0x20005000, dst_addr=0xa000, size=0x1000)
+[============================  ] 94% (576/610 pages)write(addr=0x20005000,size=0x880)
+writeBuffer(scr_addr=0x20005000, dst_addr=0xb000, size=0x880)
+[==============================] 100% (610/610 pages)
+done in 0.304 seconds
+
+Verify 38980 bytes of flash with checksum.
+checksumBuffer(start_addr=0x2000, size=0x1000) = eca8
+checksumBuffer(start_addr=0x3000, size=0x1000) = 921d
+checksumBuffer(start_addr=0x4000, size=0x1000) = 7c7f
+checksumBuffer(start_addr=0x5000, size=0x1000) = 81c0
+checksumBuffer(start_addr=0x6000, size=0x1000) = 38b5
+checksumBuffer(start_addr=0x7000, size=0x1000) = 6c9c
+checksumBuffer(start_addr=0x8000, size=0x1000) = d378
+checksumBuffer(start_addr=0x9000, size=0x1000) = 7218
+checksumBuffer(start_addr=0xa000, size=0x1000) = 5dcd
+checksumBuffer(start_addr=0xb000, size=0x844) = 9af2
+Verify successful
+done in 0.033 seconds
+CPU reset.
+readWord(addr=0)=0x20007ffc
+readWord(addr=0xe000ed00)=0x410cc601
+readWord(addr=0x41002018)=0x10010305
+writeWord(addr=0xe000ed0c,value=0x5fa0004)
