@@ -54,45 +54,36 @@ Arduino      : FAST_MULTI_PAGE_WRITE
 Arduino      : CAN_CHECKSUM_MEMORY_BUFFER
 Erase flash
 chipErase(addr=0x2000)
-done in 0.804 seconds
+done in 0.827 seconds
 
-Write 39172 bytes to flash (613 pages)
+Write 25800 bytes to flash (404 pages)
 write(addr=0x20005000,size=0x1000)
 writeBuffer(scr_addr=0x20005000, dst_addr=0x2000, size=0x1000)
-[===                           ] 10% (64/613 pages)write(addr=0x20005000,size=0x1000)
+[====                          ] 15% (64/404 pages)write(addr=0x20005000,size=0x1000)
 writeBuffer(scr_addr=0x20005000, dst_addr=0x3000, size=0x1000)
-[======                        ] 20% (128/613 pages)write(addr=0x20005000,size=0x1000)
+[=========                     ] 31% (128/404 pages)write(addr=0x20005000,size=0x1000)
 writeBuffer(scr_addr=0x20005000, dst_addr=0x4000, size=0x1000)
-[=========                     ] 31% (192/613 pages)write(addr=0x20005000,size=0x1000)
+[==============                ] 47% (192/404 pages)write(addr=0x20005000,size=0x1000)
 writeBuffer(scr_addr=0x20005000, dst_addr=0x5000, size=0x1000)
-[============                  ] 41% (256/613 pages)write(addr=0x20005000,size=0x1000)
+[===================           ] 63% (256/404 pages)write(addr=0x20005000,size=0x1000)
 writeBuffer(scr_addr=0x20005000, dst_addr=0x6000, size=0x1000)
-[===============               ] 52% (320/613 pages)write(addr=0x20005000,size=0x1000)
+[=======================       ] 79% (320/404 pages)write(addr=0x20005000,size=0x1000)
 writeBuffer(scr_addr=0x20005000, dst_addr=0x7000, size=0x1000)
-[==================            ] 62% (384/613 pages)write(addr=0x20005000,size=0x1000)
-writeBuffer(scr_addr=0x20005000, dst_addr=0x8000, size=0x1000)
-[=====================         ] 73% (448/613 pages)write(addr=0x20005000,size=0x1000)
-writeBuffer(scr_addr=0x20005000, dst_addr=0x9000, size=0x1000)
-[=========================     ] 83% (512/613 pages)write(addr=0x20005000,size=0x1000)
-writeBuffer(scr_addr=0x20005000, dst_addr=0xa000, size=0x1000)
-[============================  ] 93% (576/613 pages)write(addr=0x20005000,size=0x940)
-writeBuffer(scr_addr=0x20005000, dst_addr=0xb000, size=0x940)
-[==============================] 100% (613/613 pages)
-done in 0.308 seconds
+[============================  ] 95% (384/404 pages)write(addr=0x20005000,size=0x500)
+writeBuffer(scr_addr=0x20005000, dst_addr=0x8000, size=0x500)
+[==============================] 100% (404/404 pages)
+done in 0.203 seconds
 
-Verify 39172 bytes of flash with checksum.
-checksumBuffer(start_addr=0x2000, size=0x1000) = efe8
-checksumBuffer(start_addr=0x3000, size=0x1000) = 7447
-checksumBuffer(start_addr=0x4000, size=0x1000) = 1806
-checksumBuffer(start_addr=0x5000, size=0x1000) = edc4
-checksumBuffer(start_addr=0x6000, size=0x1000) = 7009
-checksumBuffer(start_addr=0x7000, size=0x1000) = afd8
-checksumBuffer(start_addr=0x8000, size=0x1000) = 8a19
-checksumBuffer(start_addr=0x9000, size=0x1000) = 35c8
-checksumBuffer(start_addr=0xa000, size=0x1000) = 4536
-checksumBuffer(start_addr=0xb000, size=0x904) = d3ff
+Verify 25800 bytes of flash with checksum.
+checksumBuffer(start_addr=0x2000, size=0x1000) = 809f
+checksumBuffer(start_addr=0x3000, size=0x1000) = 2527
+checksumBuffer(start_addr=0x4000, size=0x1000) = e32b
+checksumBuffer(start_addr=0x5000, size=0x1000) = ee9b
+checksumBuffer(start_addr=0x6000, size=0x1000) = 2ebd
+checksumBuffer(start_addr=0x7000, size=0x1000) = 4e75
+checksumBuffer(start_addr=0x8000, size=0x4c8) = b39f
 Verify successful
-done in 0.032 seconds
+done in 0.022 seconds
 CPU reset.
 readWord(addr=0)=0x20007ffc
 readWord(addr=0xe000ed00)=0x410cc601

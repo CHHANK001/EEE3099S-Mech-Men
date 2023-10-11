@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Jesse'.
  *
- * Model version                  : 1.11
+ * Model version                  : 1.12
  * Simulink Coder version         : 9.9 (R2023a) 19-Nov-2022
- * C/C++ source code generated on : Thu Oct  5 12:58:12 2023
+ * C/C++ source code generated on : Mon Oct  9 13:28:00 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -24,12 +24,9 @@
 #include "Jesse_types.h"
 
 /* Named constants for Chart: '<Root>/Chart' */
-#define Jesse_IN_Default               (1U)
-#define Jesse_IN_Move                  (2U)
-#define Jesse_IN_Stop                  (3U)
-
-/* Block signals (default storage) */
-B_Jesse_T Jesse_B;
+#define Jesse_IN_Default               ((uint8_T)1U)
+#define Jesse_IN_Move                  ((uint8_T)2U)
+#define Jesse_IN_Stop                  ((uint8_T)3U)
 
 /* Block states (default storage) */
 DW_Jesse_T Jesse_DW;
@@ -129,51 +126,50 @@ void Jesse_step(void)
   codertarget_arduinobase_inter_T *obj;
   real_T rtb_vtow_idx_0;
   real_T rtb_vtow_idx_1;
-  real_T y;
-  int32_T v;
+  real_T u0;
+  int32_T rtb_v;
   uint8_T tmp;
+  boolean_T c_value;
   if (Jesse_M->Timing.TaskCounters.TID[1] == 0) {
-    /* Constant: '<Root>/DriveDist' */
-    Jesse_B.DriveDist = Jesse_P.DriveDist_Value;
-
     /* MATLABSystem: '<Root>/Left encoder' */
     if (Jesse_DW.obj.SampleTime != Jesse_P.Leftencoder_SampleTime) {
       Jesse_DW.obj.SampleTime = Jesse_P.Leftencoder_SampleTime;
     }
 
-    /* MATLABSystem: '<Root>/Left encoder' */
-    Jesse_B.ticks = readDigitalPin(2);
+    c_value = readDigitalPin(2);
 
-    /* Chart: '<Root>/Chart' */
+    /* Chart: '<Root>/Chart' incorporates:
+     *  Constant: '<Root>/DriveDist'
+     *  MATLABSystem: '<Root>/Left encoder'
+     */
     if (Jesse_DW.is_active_c3_Jesse == 0U) {
       Jesse_DW.is_active_c3_Jesse = 1U;
       Jesse_DW.is_c3_Jesse = Jesse_IN_Default;
-      v = -10;
-      Jesse_DW.reqTicks = Jesse_B.DriveDist / 0.0097389372261283587;
+      rtb_v = -10;
+      Jesse_DW.reqTicks = Jesse_P.DriveDist_Value / 0.0097389372261283587;
     } else {
       switch (Jesse_DW.is_c3_Jesse) {
        case Jesse_IN_Default:
-        v = -10;
-        if ((Jesse_DW.i < Jesse_DW.reqTicks) && (!Jesse_B.ticks)) {
+        rtb_v = -10;
+        if ((Jesse_DW.i < Jesse_DW.reqTicks) && (!c_value)) {
           Jesse_DW.is_c3_Jesse = Jesse_IN_Move;
           Jesse_DW.i++;
-          Jesse_B.x = Jesse_DW.i;
         } else if ((Jesse_DW.i == Jesse_DW.reqTicks) || (Jesse_DW.i >
                     Jesse_DW.reqTicks)) {
           Jesse_DW.is_c3_Jesse = Jesse_IN_Stop;
-          v = 0;
+          rtb_v = 0;
         }
         break;
 
        case Jesse_IN_Move:
         Jesse_DW.is_c3_Jesse = Jesse_IN_Default;
-        v = -10;
-        Jesse_DW.reqTicks = Jesse_B.DriveDist / 0.0097389372261283587;
+        rtb_v = -10;
+        Jesse_DW.reqTicks = Jesse_P.DriveDist_Value / 0.0097389372261283587;
         break;
 
        default:
         /* case IN_Stop: */
-        v = 0;
+        rtb_v = 0;
         break;
       }
     }
@@ -185,36 +181,35 @@ void Jesse_step(void)
      *  Gain: '<S2>/change parameters'
      *  SignalConversion generated from: '<S2>/change parameters'
      */
-    y = 1.0 / Jesse_P.wheelR;
-    rtb_vtow_idx_0 = (Jesse_P.changeparameters_Gain[0] * (real_T)v +
+    u0 = 1.0 / Jesse_P.wheelR;
+    rtb_vtow_idx_0 = (Jesse_P.changeparameters_Gain[0] * (real_T)rtb_v +
                       Jesse_P.changeparameters_Gain[2] * Jesse_P.Constant_Value)
-      * y;
-    rtb_vtow_idx_1 = (Jesse_P.changeparameters_Gain[1] * (real_T)v +
+      * u0;
+    rtb_vtow_idx_1 = (Jesse_P.changeparameters_Gain[1] * (real_T)rtb_v +
                       Jesse_P.changeparameters_Gain[3] * Jesse_P.Constant_Value)
-      * y;
-
-    /* Lookup_n-D: '<Root>/Left Motor LUT' incorporates:
-     *  Abs: '<Root>/Abs1'
-     */
-    Jesse_B.LeftPWM = Jesse_P.InputPWM[plook_u32d_binckan(fabs(rtb_vtow_idx_0),
-      Jesse_P.WheelSpeed, 172U)];
+      * u0;
 
     /* MATLABSystem: '<Root>/Left PWM' */
     obj = &Jesse_DW.obj_b;
     obj->PWMDriverObj.MW_PWM_HANDLE = MW_PWM_GetHandle(16U);
-    if (Jesse_B.LeftPWM <= 255.0) {
-      y = Jesse_B.LeftPWM;
-    } else {
-      y = 255.0;
+
+    /* Lookup_n-D: '<Root>/Left Motor LUT' incorporates:
+     *  Abs: '<Root>/Abs1'
+     */
+    u0 = Jesse_P.InputPWM[plook_u32d_binckan(fabs(rtb_vtow_idx_0),
+      Jesse_P.WheelSpeed, 172U)];
+
+    /* MATLABSystem: '<Root>/Left PWM' */
+    if (!(u0 <= 255.0)) {
+      u0 = 255.0;
     }
 
-    if (!(y >= 0.0)) {
-      y = 0.0;
+    if (!(u0 >= 0.0)) {
+      u0 = 0.0;
     }
 
-    MW_PWM_SetDutyCycle(Jesse_DW.obj_b.PWMDriverObj.MW_PWM_HANDLE, y);
+    MW_PWM_SetDutyCycle(Jesse_DW.obj_b.PWMDriverObj.MW_PWM_HANDLE, u0);
 
-    /* End of MATLABSystem: '<Root>/Left PWM' */
     /* Switch: '<Root>/Switch' incorporates:
      *  Constant: '<Root>/Constant2'
      *  Constant: '<Root>/Constant3'
@@ -228,10 +223,10 @@ void Jesse_step(void)
     /* End of Switch: '<Root>/Switch' */
 
     /* MATLABSystem: '<Root>/Left motor back' */
-    y = rt_roundd_snf(rtb_vtow_idx_0);
-    if (y < 256.0) {
-      if (y >= 0.0) {
-        tmp = (uint8_T)y;
+    u0 = rt_roundd_snf(rtb_vtow_idx_0);
+    if (u0 < 256.0) {
+      if (u0 >= 0.0) {
+        tmp = (uint8_T)u0;
       } else {
         tmp = 0U;
       }
@@ -255,19 +250,19 @@ void Jesse_step(void)
     /* Lookup_n-D: '<Root>/Left Motor LUT1' incorporates:
      *  Abs: '<Root>/Abs'
      */
-    y = Jesse_P.InputPWM[plook_u32d_binckan(fabs(rtb_vtow_idx_1),
+    u0 = Jesse_P.InputPWM[plook_u32d_binckan(fabs(rtb_vtow_idx_1),
       Jesse_P.WheelSpeed, 172U)];
 
     /* MATLABSystem: '<Root>/Right PWM' */
-    if (!(y <= 255.0)) {
-      y = 255.0;
+    if (!(u0 <= 255.0)) {
+      u0 = 255.0;
     }
 
-    if (!(y >= 0.0)) {
-      y = 0.0;
+    if (!(u0 >= 0.0)) {
+      u0 = 0.0;
     }
 
-    MW_PWM_SetDutyCycle(Jesse_DW.obj_ac.PWMDriverObj.MW_PWM_HANDLE, y);
+    MW_PWM_SetDutyCycle(Jesse_DW.obj_ac.PWMDriverObj.MW_PWM_HANDLE, u0);
 
     /* Switch: '<Root>/Switch1' incorporates:
      *  Constant: '<Root>/Constant4'
@@ -282,10 +277,10 @@ void Jesse_step(void)
     /* End of Switch: '<Root>/Switch1' */
 
     /* MATLABSystem: '<Root>/Right motor back' */
-    y = rt_roundd_snf(rtb_vtow_idx_1);
-    if (y < 256.0) {
-      if (y >= 0.0) {
-        tmp = (uint8_T)y;
+    u0 = rt_roundd_snf(rtb_vtow_idx_1);
+    if (u0 < 256.0) {
+      if (u0 >= 0.0) {
+        tmp = (uint8_T)u0;
       } else {
         tmp = 0U;
       }
@@ -303,96 +298,14 @@ void Jesse_step(void)
     writeDigitalPin(6, (uint8_T)!(rtb_vtow_idx_1 != 0.0));
   }
 
-  {                                    /* Sample time: [0.01s, 0.0s] */
-    extmodeErrorCode_T errorCode = EXTMODE_SUCCESS;
-    extmodeSimulationTime_T currentTime = (extmodeSimulationTime_T)
-      Jesse_M->Timing.taskTime0;
-
-    /* Trigger External Mode event */
-    errorCode = extmodeEvent(0,currentTime);
-    if (errorCode != EXTMODE_SUCCESS) {
-      /* Code to handle External Mode event errors
-         may be added here */
-    }
-  }
-
-  if (Jesse_M->Timing.TaskCounters.TID[1] == 0) {/* Sample time: [0.1s, 0.0s] */
-    extmodeErrorCode_T errorCode = EXTMODE_SUCCESS;
-    extmodeSimulationTime_T currentTime = (extmodeSimulationTime_T)
-      ((Jesse_M->Timing.clockTick1) * 0.1);
-
-    /* Trigger External Mode event */
-    errorCode = extmodeEvent(1,currentTime);
-    if (errorCode != EXTMODE_SUCCESS) {
-      /* Code to handle External Mode event errors
-         may be added here */
-    }
-  }
-
-  /* Update absolute time for base rate */
-  /* The "clockTick0" counts the number of times the code of this task has
-   * been executed. The absolute time is the multiplication of "clockTick0"
-   * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not
-   * overflow during the application lifespan selected.
-   */
-  Jesse_M->Timing.taskTime0 =
-    ((time_T)(++Jesse_M->Timing.clockTick0)) * Jesse_M->Timing.stepSize0;
-  if (Jesse_M->Timing.TaskCounters.TID[1] == 0) {
-    /* Update absolute timer for sample time: [0.1s, 0.0s] */
-    /* The "clockTick1" counts the number of times the code of this task has
-     * been executed. The resolution of this integer timer is 0.1, which is the step size
-     * of the task. Size of "clockTick1" ensures timer will not overflow during the
-     * application lifespan selected.
-     */
-    Jesse_M->Timing.clockTick1++;
-  }
-
   rate_scheduler();
 }
 
 /* Model initialize function */
 void Jesse_initialize(void)
 {
-  /* Registration code */
-  rtmSetTFinal(Jesse_M, 60.0);
-  Jesse_M->Timing.stepSize0 = 0.01;
-
-  /* External mode info */
-  Jesse_M->Sizes.checksums[0] = (2741961605U);
-  Jesse_M->Sizes.checksums[1] = (2057345428U);
-  Jesse_M->Sizes.checksums[2] = (1595378103U);
-  Jesse_M->Sizes.checksums[3] = (1678658597U);
-
-  {
-    static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
-    static RTWExtModeInfo rt_ExtModeInfo;
-    static const sysRanDType *systemRan[13];
-    Jesse_M->extModeInfo = (&rt_ExtModeInfo);
-    rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
-    systemRan[0] = &rtAlwaysEnabled;
-    systemRan[1] = &rtAlwaysEnabled;
-    systemRan[2] = &rtAlwaysEnabled;
-    systemRan[3] = &rtAlwaysEnabled;
-    systemRan[4] = &rtAlwaysEnabled;
-    systemRan[5] = &rtAlwaysEnabled;
-    systemRan[6] = &rtAlwaysEnabled;
-    systemRan[7] = &rtAlwaysEnabled;
-    systemRan[8] = &rtAlwaysEnabled;
-    systemRan[9] = &rtAlwaysEnabled;
-    systemRan[10] = &rtAlwaysEnabled;
-    systemRan[11] = &rtAlwaysEnabled;
-    systemRan[12] = &rtAlwaysEnabled;
-    rteiSetModelMappingInfoPtr(Jesse_M->extModeInfo,
-      &Jesse_M->SpecialInfo.mappingInfo);
-    rteiSetChecksumsPtr(Jesse_M->extModeInfo, Jesse_M->Sizes.checksums);
-    rteiSetTPtr(Jesse_M->extModeInfo, rtmGetTPtr(Jesse_M));
-  }
-
   {
     codertarget_arduinobase_inter_T *obj;
-
-    /* Start for Constant: '<Root>/DriveDist' */
-    Jesse_B.DriveDist = Jesse_P.DriveDist_Value;
 
     /* Start for MATLABSystem: '<Root>/Left encoder' */
     Jesse_DW.obj.matlabCodegenIsDeleted = false;
@@ -466,6 +379,7 @@ void Jesse_terminate(void)
   }
 
   /* End of Terminate for MATLABSystem: '<Root>/Left PWM' */
+
   /* Terminate for MATLABSystem: '<Root>/Left motor back' */
   if (!Jesse_DW.obj_a.matlabCodegenIsDeleted) {
     Jesse_DW.obj_a.matlabCodegenIsDeleted = true;

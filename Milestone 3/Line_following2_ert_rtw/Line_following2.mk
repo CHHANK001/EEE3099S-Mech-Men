@@ -2,7 +2,7 @@
 ## Makefile generated for component 'Line_following2'. 
 ## 
 ## Makefile     : Line_following2.mk
-## Generated on : Fri Oct 06 14:11:22 2023
+## Generated on : Mon Oct 09 11:00:19 2023
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/Line_following2.elf
 ## Product type : executable
 ## 
@@ -21,14 +21,14 @@ MAKEFILE                  = Line_following2.mk
 MATLAB_ROOT               = C:/PROGRA~1/MATLAB/R2023a
 MATLAB_BIN                = C:/PROGRA~1/MATLAB/R2023a/bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)/win64
-START_DIR                 = C:/Users/JACKYO~1/OneDrive/DOCUME~1/GitHub/EEE309~1/MILEST~3
+START_DIR                 = C:/Users/ankus/OneDrive/Desktop/EEE309~2/EEE309~1/MILEST~3
 SOLVER                    = 
 SOLVER_OBJ                = 
 CLASSIC_INTERFACE         = 0
 TGT_FCN_LIB               = None
 MODEL_HAS_DYNAMICALLY_LOADED_SFCNS = 0
 RELATIVE_PATH_TO_ANCHOR   = ..
-SLIB_PATH                 = C:/Users/JACKYO~1/DOCUME~1/MATLAB/R2023a/ARDUIN~1/ARDUIN~1/FASTER~1
+SLIB_PATH                 = C:/Users/ankus/DOCUME~1/MATLAB/R2023a/ARDUIN~1/ARDUIN~1/FASTER~1
 C_STANDARD_OPTS           = 
 CPP_STANDARD_OPTS         = 
 

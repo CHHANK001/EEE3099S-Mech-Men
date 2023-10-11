@@ -165,7 +165,7 @@ SHAREDLIB_LDFLAGS += $(SHAREDLIB_LDFLAGS_SKIPFORSIL)
 ###########################################################################
 SLMKPATH=C:/PROGRA~3/MATLAB/SUPPOR~1/R2023a/toolbox/target/SUPPOR~1/ARDUIN~2/STATIC~1
 MODELMK=Line_following2.mk
-SLIB_PATH=C:/Users/JACKYO~1/DOCUME~1/MATLAB/R2023a/ARDUIN~1/ARDUIN~1/FASTER~1
+SLIB_PATH=C:/Users/ankus/DOCUME~1/MATLAB/R2023a/ARDUIN~1/ARDUIN~1/FASTER~1
 VARIANT_HEADER_PATH=$(ARDUINO_SAMD_ROOT)/hardware/samd/1.8.9/variants/nano_33_iot
 ARDUINO_SKETCHBOOK_ROOT=C:/PROGRA~3/MATLAB/SUPPOR~1/R2023a/aIDE/portable/SKETCH~1/LIBRAR~1
 ARDUINO_BASESUPPORTPKG_ROOT=C:/PROGRA~3/MATLAB/SUPPOR~1/R2023a/toolbox/target/SUPPOR~1/ARDUIN~2
@@ -197,6 +197,6 @@ export ARDUINO_SAMD_BOARDS
 .PHONY : all
 all : 
 	@echo "### Generating static library."
-	"$(MAKE)" -j11 -C "$(SLMKPATH)" SHELL="$(SHELL)" -f samdcore.mk all
-	"$(MAKE)" -j11 SHELL="$(SHELL)" -f "$(MODELMK)" all
+	"$(MAKE)" -j5 -C "$(SLMKPATH)" SHELL="$(SHELL)" -f samdcore.mk all
+	"$(MAKE)" -j5 SHELL="$(SHELL)" -f "$(MODELMK)" all
 

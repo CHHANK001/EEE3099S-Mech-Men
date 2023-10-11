@@ -3,10 +3,8 @@ Line_following2_data.o: \
  C:/Users/ankus/OneDrive/Desktop/EEE309~2/EEE309~1/MILEST~3/Line_following2_ert_rtw/Line_following2.h \
  C:/Users/ankus/OneDrive/Desktop/EEE309~2/EEE309~1/MILEST~3/Line_following2_ert_rtw/rtwtypes.h \
  C:/PROGRA~1/MATLAB/R2023a/extern/include/tmwtypes.h \
- C:/PROGRA~1/MATLAB/R2023a/simulink/include/rtw_extmode.h \
- C:/Users/ankus/OneDrive/Desktop/EEE309~2/EEE309~1/MILEST~3/Line_following2_ert_rtw/rtwtypes.h \
- C:/PROGRA~1/MATLAB/R2023a/simulink/include/sysran_types.h \
  C:/PROGRA~1/MATLAB/R2023a/simulink/include/rtw_continuous.h \
+ C:/Users/ankus/OneDrive/Desktop/EEE309~2/EEE309~1/MILEST~3/Line_following2_ert_rtw/rtwtypes.h \
  C:/PROGRA~1/MATLAB/R2023a/simulink/include/rtw_solver.h \
  C:/PROGRA~1/MATLAB/R2023a/simulink/include/rtw_continuous.h \
  C:/PROGRA~1/MATLAB/R2023a/toolbox/target/shared/svd/common/include/MW_PWM.h \
@@ -110,13 +108,9 @@ C:/Users/ankus/OneDrive/Desktop/EEE309~2/EEE309~1/MILEST~3/Line_following2_ert_r
 
 C:/PROGRA~1/MATLAB/R2023a/extern/include/tmwtypes.h:
 
-C:/PROGRA~1/MATLAB/R2023a/simulink/include/rtw_extmode.h:
+C:/PROGRA~1/MATLAB/R2023a/simulink/include/rtw_continuous.h:
 
 C:/Users/ankus/OneDrive/Desktop/EEE309~2/EEE309~1/MILEST~3/Line_following2_ert_rtw/rtwtypes.h:
-
-C:/PROGRA~1/MATLAB/R2023a/simulink/include/sysran_types.h:
-
-C:/PROGRA~1/MATLAB/R2023a/simulink/include/rtw_continuous.h:
 
 C:/PROGRA~1/MATLAB/R2023a/simulink/include/rtw_solver.h:
 

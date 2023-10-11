@@ -7,18 +7,11 @@
 %endfunction
 %function ChartDataMap(block, system) void
   %createrecord ChartDataElements {\
-    NumChartData   6 \
+    NumChartData   4 \
     ChartDataDefaults {\
       RecordType   "ChartData"\
       Dimensions   []\
       IsTestPoint  0\
-    }\
-    ChartData {\
-      Name         "dist1Tick"\
-      Description  "ChartLocal"\
-      SFName       ""\
-      Path         "dist1Tick"\
-      SrcLocation  ""\
     }\
     ChartData {\
       Name         "reqTicks"\
@@ -35,27 +28,18 @@
       SrcLocation  ""\
     }\
     ChartData {\
-      Name         "sfEvent"\
-      Description  "ActiveChartEvent"\
+      Name         "is_active_c3_Jesse"\
+      Description  "StateIsActive"\
       SFName       ""\
       Path         ""\
       SrcLocation  ""\
     }\
     ChartData {\
-      Name         "is_active_c3_Jesse"\
-      Description  "StateIsActive"\
-      SFName       "is_active_c3_Jesse"\
-      Path         "is_active_c3_Jesse"\
-      SrcLocation  ""\
-      IsTestPoint  1\
-    }\
-    ChartData {\
       Name         "is_c3_Jesse"\
       Description  "StateActiveChild"\
-      SFName       "is_c3_Jesse"\
-      Path         "is_c3_Jesse"\
+      SFName       ""\
+      Path         ""\
       SrcLocation  ""\
-      IsTestPoint  1\
     }\
   }
   %return ChartDataElements

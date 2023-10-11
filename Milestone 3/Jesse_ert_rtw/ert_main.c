@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Jesse'.
  *
- * Model version                  : 1.11
+ * Model version                  : 1.12
  * Simulink Coder version         : 9.9 (R2023a) 19-Nov-2022
- * C/C++ source code generated on : Thu Oct  5 12:58:12 2023
+ * C/C++ source code generated on : Mon Oct  9 13:28:00 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -19,8 +19,6 @@
 
 #include "Jesse.h"
 #include "rtwtypes.h"
-#include "xcp.h"
-#include "ext_mode.h"
 #include "MW_target_hardware_resources.h"
 
 volatile int IsrOverrun = 0;
@@ -58,7 +56,6 @@ int main(void)
 {
   float modelBaseRate = 0.01;
   float systemClock = 0;
-  extmodeErrorCode_T errorCode = EXTMODE_SUCCESS;
 
   /* Initialize variables */
   stopRequested = false;
@@ -67,36 +64,10 @@ int main(void)
   MW_usbattach();
   MW_Arduino_Init();
   rtmSetErrorStatus(Jesse_M, 0);
-
-  /* Parse External Mode command line arguments */
-  errorCode = extmodeParseArgs(0, NULL);
-  if (errorCode != EXTMODE_SUCCESS) {
-    return (errorCode);
-  }
-
   Jesse_initialize();
   noInterrupts();
-  interrupts();
-
-  /* External Mode initialization */
-  errorCode = extmodeInit(Jesse_M->extModeInfo, &rtmGetTFinal(Jesse_M));
-  if (errorCode != EXTMODE_SUCCESS) {
-    /* Code to handle External Mode initialization errors
-       may be added here */
-  }
-
-  if (errorCode == EXTMODE_SUCCESS) {
-    /* Wait until a Start or Stop Request has been received from the Host */
-    extmodeWaitForHostRequest(EXTMODE_WAIT_FOREVER);
-    if (extmodeStopRequested()) {
-      rtmSetStopRequested(Jesse_M, true);
-    }
-  }
-
-  noInterrupts();
   configureArduinoARM_M0plusTimer();
-  runModel = !extmodeSimulationComplete() && !extmodeStopRequested() &&
-    !rtmGetStopRequested(Jesse_M);
+  runModel = rtmGetErrorStatus(Jesse_M) == (NULL);
 
 #ifndef _MW_ARDUINO_LOOP_
 
@@ -106,26 +77,12 @@ int main(void)
 
   interrupts();
   while (runModel) {
-    /* Run External Mode background activities */
-    errorCode = extmodeBackgroundRun();
-    if (errorCode != EXTMODE_SUCCESS) {
-      /* Code to handle External Mode background task errors
-         may be added here */
-    }
-
-    stopRequested = !(!extmodeSimulationComplete() && !extmodeStopRequested() &&
-                      !rtmGetStopRequested(Jesse_M));
-    runModel = !(stopRequested);
-    if (stopRequested)
-      disable_rt_OneStep();
+    stopRequested = !(rtmGetErrorStatus(Jesse_M) == (NULL));
     MW_Arduino_Loop();
   }
 
   /* Terminate model */
   Jesse_terminate();
-
-  /* External Mode reset */
-  extmodeReset();
   MW_Arduino_Terminate();
   noInterrupts();
   return 0;

@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'Jesse'.
  *
- * Model version                  : 1.11
+ * Model version                  : 1.12
  * Simulink Coder version         : 9.9 (R2023a) 19-Nov-2022
- * C/C++ source code generated on : Thu Oct  5 12:58:12 2023
+ * C/C++ source code generated on : Mon Oct  9 13:28:00 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -20,6 +20,11 @@
 #ifndef RTW_HEADER_rtmodel_h_
 #define RTW_HEADER_rtmodel_h_
 #include "Jesse.h"
+
+/* Macros generated for backwards compatibility  */
+#ifndef rtmGetStopRequested
+#define rtmGetStopRequested(rtm)       ((void*) 0)
+#endif
 #endif                                 /* RTW_HEADER_rtmodel_h_ */
 
 /*
